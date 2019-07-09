@@ -1,5 +1,5 @@
 ﻿cmake_minimum_required (VERSION 3.11)
-project ("sfml_template")
+project ("TheTemplate")
 
 ####This entire section should be left alone. 
 ## This entire if block either calls Cmake from Conan, or calls Conan from Cmake.
@@ -22,11 +22,24 @@ endif()
 
 
 
-#### This is where the Cmake code for the project goes.
-add_executable(${PROJECT_NAME} "${CMAKE_SOURCE_DIR}/src/main.cpp")
-#target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/includes")
+#### This is where the Cmake code for the project source code files goes.
 
+# All cpp files go here.
+set(cpp main.cpp)
+
+# All header files go here.
+#set(headers file.h)
+
+
+add_executable(${PROJECT_NAME} ${cpp})
+#add_executable(${PROJECT_NAME} ${headers} ${cpp})
+#target_include_directories(${PROJECT_NAME} PUBLIC ${headers})
+
+# All compile features+options should be here.
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
+target_compile_options(${PROJECT_NAME} PUBLIC -Werror)
+
+# Do not forget to link to the dependency libraries here.
 target_link_libraries(${PROJECT_NAME} CONAN_PKG::sfml)
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
