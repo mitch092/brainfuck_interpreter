@@ -1,21 +1,7 @@
-#include <SFML/Graphics.hpp>
+#include "interpreter.h"
 
 int main() {
-  sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-  sf::CircleShape shape(100.f);
-  shape.setFillColor(sf::Color::Green);
-
-  for (sf::Event event; window.isOpen();) {
-
-    while (window.pollEvent(event)) {
-      if (event.type == sf::Event::Closed)
-        window.close();
-    }
-
-    window.clear();
-    window.draw(shape);
-    window.display();
-  }
-
+  Interpreter intr{};
+  intr.test("C:/Users/steve/Desktop/test.b");
   return EXIT_SUCCESS;
 }

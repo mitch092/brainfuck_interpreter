@@ -4,3 +4,4 @@ test_package/build
 .vscode/
 CMakeSettings.json
 build/
+out/
