@@ -9,7 +9,7 @@
 
 class Interpreter {
  public:
-  Interpreter() = default;
+  Interpreter() : memory(), memory_ptr(0), program(), program_ptr(0), bracket_stack(){};
   ~Interpreter() = default;
 
   void run_file(const char* filename) {
@@ -51,42 +51,64 @@ class Interpreter {
 
     while (0 <= program_ptr && program_ptr < program.size()) {
       switch (program[program_ptr]) {
+
         case '>':
           ++memory_ptr;
           break;
+
         case '<':
           --memory_ptr;
           break;
+
         case '+':
           ++memory[memory_ptr];
           break;
+
         case '-':
           --memory[memory_ptr];
           break;
+
         case '.':
           std::cout << memory[memory_ptr];
           break;
+
         case ',':
           memory[memory_ptr] = static_cast<unsigned char>(getchar());
           break;
-        case '[': // TODO
-          bracket_stack.push(memory_ptr);
 
-          if (memory[memory_ptr] != 0) {
-            ++memory_ptr;
-          } else {
-            auto bracket = memory_ptr;
-            do {
-            } while ()
+        case '[':  // TODO
+          bracket_stack.push(program_ptr);
+          if (memory[memory_ptr] == 0) {
+            for (auto left = bracket_stack.top();;) {
+              ++program_ptr;
+              if (program[program_ptr] == '[')
+                bracket_stack.push(program_ptr);
+              else if (program[program_ptr] == ']') {
+                if (bracket_stack.top() == left) {
+                  bracket_stack.pop();
+                  break;
+                } else {
+                  bracket_stack.pop();
+                }
+              }
+            }
           }
           break;
-        case ']':
 
+        case ']':
+          if (memory[memory_ptr] != 0) {
+            program_ptr = bracket_stack.top();
+          } else {
+            bracket_stack.pop();
+          }
           break;
+
         default:
           std::cout << "Unexpected token: " << program[program_ptr] << std::endl;
           break;
       }
+
+      ++program_ptr;
     }
   }
 
